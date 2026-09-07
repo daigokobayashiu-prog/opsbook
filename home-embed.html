@@ -1,0 +1,641 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,600&family=Poppins:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+
+.ob-page {
+  --background: #F8F8F8;
+  --surface: #FFFFFF;
+  --text-primary: #141414;
+  --text-secondary: #6D727F;
+  --text-muted: #767A84;
+  --button-bg: #0B0B0B;
+  --button-text: #FFFFFF;
+  --border: #BCBDC0;
+  --border-soft: #E4E5E8;
+
+  /* Signal amber — the one accent, reserved for live/active/human-in-the-loop
+     moments so it reads as meaningful rather than decorative. */
+  --accent: #FF7A29;
+  --accent-deep: #9A3E0C;
+  --accent-soft: rgba(255, 122, 41, 0.14);
+
+  --font-body: 'Poppins', sans-serif;
+  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+}
+.ob-page * { box-sizing: border-box; }
+.ob-page img { max-width: 100%; display: block; }
+.ob-page a { color: inherit; text-decoration: none; }
+
+.ob-page .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+.ob-page section { padding: 100px 0; }
+
+.ob-page .label { display: inline-block; font-family: var(--font-mono); font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; font-size: 12px; color: var(--text-primary); margin-bottom: 32px; }
+.ob-page .label.muted { color: var(--text-muted); }
+
+.ob-page h1 { font-family: var(--font-display); font-size: 60px; font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 28px; color: var(--text-primary); }
+.ob-page h2 { font-family: var(--font-display); font-size: 40px; font-weight: 600; line-height: 1.15; letter-spacing: -0.015em; margin: 0 0 20px; color: var(--text-primary); }
+.ob-page h3 { font-family: var(--font-display); font-size: 22px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; margin: 0 0 12px; color: var(--text-primary); }
+.ob-page p { font-size: 17px; line-height: 1.7; font-weight: 400; color: var(--text-secondary); margin: 0 0 16px; }
+.ob-page p.lead { font-size: 20px; color: var(--text-secondary); max-width: 64ch; line-height: 1.55; }
+
+.ob-page .cta-btn { display: inline-flex; align-items: center; justify-content: center; padding: 16px 28px; background: var(--button-bg); color: var(--button-text); border-radius: 10px; font-weight: 600; font-size: 15px; text-decoration: none; transition: all .25s ease; border: 1px solid var(--button-bg); }
+.ob-page .cta-btn:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 14px 30px rgba(255, 122, 41, 0.28); }
+.ob-page .cta-secondary { display: inline-flex; align-items: center; justify-content: center; padding: 16px 28px; background: transparent; color: var(--text-primary); border-radius: 10px; font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid var(--border); transition: all .25s ease; margin-left: 10px; }
+.ob-page .cta-secondary:hover { border-color: var(--accent); color: var(--accent-deep); }
+
+.ob-page .card { position: relative; background: var(--surface); border: 1px solid var(--border-soft); border-radius: 20px; padding: 32px; transition: .25s ease; }
+.ob-page .card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 16px 40px rgba(255, 122, 41, 0.12); }
+.ob-page .card::before, .ob-page .card::after { content: ''; position: absolute; width: 14px; height: 14px; opacity: 0; transition: opacity .25s ease; pointer-events: none; }
+.ob-page .card::before { top: 10px; left: 10px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+.ob-page .card::after { bottom: 10px; right: 10px; border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent); }
+.ob-page .card:hover::before, .ob-page .card:hover::after { opacity: 1; }
+.ob-page .card .card-index { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--accent-deep); letter-spacing: 0.05em; margin-bottom: 12px; }
+.ob-page .card .card-label { font-family: var(--font-mono); font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; font-size: 11px; color: var(--text-muted); margin-bottom: 16px; }
+.ob-page .card p { font-size: 15px; line-height: 1.7; margin: 0; color: var(--text-secondary); }
+.ob-page .card .card-link { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--accent-deep); margin-top: 16px; display: inline-block; }
+.ob-page a.card { display: block; }
+
+.ob-page .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.ob-page .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+@media (max-width: 991px) {
+  .ob-page .grid-2, .ob-page .grid-3 { grid-template-columns: 1fr; }
+  .ob-page h1 { font-size: 40px; } .ob-page h2 { font-size: 30px; }
+  .ob-page section { padding: 70px 0; }
+}
+
+/* HERO — centered, dynamic entrance */
+.ob-page .hero { position: relative; padding: 56px 0 100px; background-color: var(--surface); background-image: linear-gradient(rgba(20,20,20,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(20,20,20,0.04) 1px, transparent 1px); background-size: 48px 48px; border-bottom: 1px solid var(--border-soft); overflow: hidden; }
+.ob-page .hero-gear-bg { position: absolute; z-index: 0; top: 50%; left: 50%; width: 640px; height: 640px; margin: -320px 0 0 -320px; color: var(--text-primary); opacity: .045; pointer-events: none; }
+@media (max-width: 768px) { .ob-page .hero-gear-bg { width: 420px; height: 420px; margin: -210px 0 0 -210px; } }
+.ob-page .hero .container { position: relative; z-index: 1; text-align: center; }
+.ob-page .hero .container::before, .ob-page .hero .container::after { content: ''; position: absolute; top: -20px; width: 22px; height: 22px; border-top: 2px solid var(--accent); opacity: .5; pointer-events: none; }
+.ob-page .hero .container::before { left: 32px; border-left: 2px solid var(--accent); }
+.ob-page .hero .container::after { right: 32px; border-right: 2px solid var(--accent); }
+.ob-page .hero .label { text-align: center; }
+.ob-page .hero h1 { max-width: 16ch; margin-left: auto; margin-right: auto; text-align: center; font-size: 74px; }
+@media (max-width: 991px) { .ob-page .hero h1 { font-size: 46px; } }
+.ob-page .hero .lead { margin-bottom: 24px; margin-left: auto; margin-right: auto; text-align: center; }
+.ob-page .entity-line { font-size: 15px; color: var(--text-secondary); max-width: 62ch; line-height: 1.65; margin: 0 auto 36px; border-left: 3px solid var(--accent); padding-left: 16px; text-align: left; }
+
+.ob-page .hero .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: middle; animation: ob-dot-pulse 2s ease-in-out infinite; }
+@keyframes ob-dot-pulse { 0%, 100% { opacity: .5; transform: scale(1); box-shadow: 0 0 0 0 rgba(255,122,41,0.4); } 50% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 0 4px rgba(255,122,41,0); } }
+
+.ob-page .hero .label, .ob-page .hero h1, .ob-page .hero .lead, .ob-page .hero .entity-line, .ob-page .hero .cta-btn, .ob-page .hero .cta-secondary {
+  opacity: 0;
+  animation: ob-hero-in .75s cubic-bezier(.16,1,.3,1) forwards;
+}
+.ob-page .hero .label { animation-delay: .05s; }
+.ob-page .hero h1 { animation-delay: .15s; }
+.ob-page .hero .lead { animation-delay: .3s; }
+.ob-page .hero .entity-line { animation-delay: .42s; }
+.ob-page .hero .cta-btn { animation-delay: .54s; }
+.ob-page .hero .cta-secondary { animation-delay: .6s; }
+@keyframes ob-hero-in { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .ob-page .hero .live-dot { animation: none !important; }
+  .ob-page .hero-gear-bg { animation: none !important; }
+  .ob-page .hero .label, .ob-page .hero h1, .ob-page .hero .lead, .ob-page .hero .entity-line, .ob-page .hero .cta-btn, .ob-page .hero .cta-secondary {
+    animation: none !important; opacity: 1 !important; transform: none !important;
+  }
+}
+
+/* PROBLEM */
+.ob-page .problem { background: var(--background); }
+.ob-page .problem .header { max-width: 760px; margin-bottom: 56px; }
+
+/* SOLUTION (dark inverted band) */
+.ob-page .solution { background-color: var(--text-primary); background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px); background-size: 48px 48px; color: #FFFFFF; }
+.ob-page .solution .label { color: rgba(255,255,255,0.6); }
+.ob-page .solution .grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 60px; align-items: start; }
+.ob-page .solution p { font-family: var(--font-display); font-style: italic; font-size: 24px; font-weight: 500; color: #FFFFFF; line-height: 1.45; }
+.ob-page .solution p strong { font-weight: 700; }
+.ob-page .solution p.sub { font-family: var(--font-body); font-style: normal; font-weight: 400; color: rgba(255,255,255,0.7); font-size: 18px; margin-top: 18px; line-height: 1.65; }
+@media (max-width: 991px) { .ob-page .solution .grid { grid-template-columns: 1fr; gap: 24px; } .ob-page .solution p { font-size: 21px; } }
+.ob-page .diagram { margin-top: 40px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14); border-radius: 16px; padding: 40px 28px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.ob-page .diagram-sources { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.ob-page .diagram-chip { font-family: var(--font-mono); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.16); border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.75); }
+.ob-page .diagram-arrow { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; }
+.ob-page .diagram-core { background: rgba(255,122,41,0.12); border: 1px solid rgba(255,122,41,0.4); border-radius: 10px; padding: 14px 28px; font-size: 14px; font-weight: 600; color: #FFFFFF; text-align: center; }
+
+/* USE CASE SOLO (loop section reuses this for centering) */
+.ob-page .usecase-solo { background: var(--surface); border-bottom: 1px solid var(--border-soft); padding: 80px 0; }
+.ob-page .usecase-solo .inner { max-width: 680px; margin-bottom: 8px; }
+.ob-page .loopwrap { display: flex; justify-content: center; margin-top: 8px; }
+
+/* ── LOOP ANIMATION ── */
+/* Continuous idle motion only runs once .loopwrap carries .loop-active,
+   which JS adds after the step-node entrance below finishes. */
+.ob-page .loopwrap text { font-family: var(--font-mono); }
+.ob-page .loop-ring { opacity: 0; transition: opacity .5s ease; }
+.ob-page .loopwrap.pop-in .loop-ring { opacity: 1; }
+.ob-page .loopwrap.loop-active .loop-ring { animation: loop-flow 26s linear infinite; }
+@keyframes loop-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -160; } }
+
+.ob-page .loop-arrow { transform-box: fill-box; transform-origin: center; opacity: 0; transition: opacity .4s ease; }
+.ob-page .loopwrap.pop-in .loop-arrow { opacity: .45; }
+.ob-page .loopwrap.loop-active .loop-arrow { animation: loop-arrow-pulse 2s ease-in-out infinite; }
+@keyframes loop-arrow-pulse { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+
+.ob-page .loop-node { transform-box: fill-box; transform-origin: center; }
+.ob-page .loopwrap.loop-active .loop-node { animation: loop-node-pulse 18s ease-in-out infinite; }
+@keyframes loop-node-pulse {
+  0%   { transform: scale(1); filter: none; }
+  6%   { transform: scale(1.16); filter: drop-shadow(0 0 6px rgba(255,122,41,0.45)); stroke: var(--accent); }
+  13%  { transform: scale(1); filter: none; }
+  100% { transform: scale(1); filter: none; }
+}
+
+.ob-page .loop-traveler { offset-path: circle(230px at 360px 380px); offset-rotate: 0deg; opacity: 0; transition: opacity .4s ease; }
+.ob-page .loopwrap.loop-active .loop-traveler { opacity: 1; animation: loop-travel 18s linear infinite; }
+@keyframes loop-travel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+
+/* Step nodes pop out from the center gear on scroll (offset/delay set per node via inline --ldx/--ldy/--ld), before the loop goes idle-active */
+.ob-page .loop-node-group { transform-box: fill-box; transform-origin: center; opacity: 0; transform: translate(var(--ldx), var(--ldy)) scale(.3); }
+.ob-page .loopwrap.pop-in .loop-node-group { animation: loop-pop-in .6s cubic-bezier(.34,1.4,.64,1) var(--ld, 0s) forwards; }
+@keyframes loop-pop-in { to { opacity: 1; transform: translate(0,0) scale(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ob-page .loop-ring, .ob-page .loop-arrow, .ob-page .loop-node, .ob-page .loop-traveler, .ob-page .loop-node-group { animation: none !important; }
+  .ob-page .loop-ring, .ob-page .loop-arrow, .ob-page .loop-node-group { opacity: 1 !important; transform: none !important; }
+  .ob-page .loop-traveler { opacity: 0; }
+}
+
+/* CARD SECTIONS (pillars, governance, industry, outcomes) */
+.ob-page .cardsection { background: var(--background); }
+.ob-page .cardsection.alt { background: var(--surface); border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); }
+.ob-page .cardsection .header { max-width: 720px; margin-bottom: 56px; }
+.ob-page .card .index-tag { font-family: var(--font-mono); font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; font-size: 11px; color: var(--text-muted); margin-bottom: 14px; }
+.ob-page .card .index-tag .idx { color: var(--accent-deep); font-weight: 700; }
+
+/* PLACEHOLDER */
+.ob-page .placeholder { background: var(--surface); border: 1px dashed var(--border); border-radius: 16px; padding: 32px; }
+.ob-page .placeholder-label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+.ob-page .placeholder p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin: 0; }
+
+/* CUSTOMER PROOF */
+.ob-page .proof-card { position: relative; background: var(--surface); border: 1px solid var(--border-soft); border-radius: 20px; padding: 48px; max-width: 880px; overflow: hidden; }
+.ob-page .proof-card::before { content: '\201C'; position: absolute; top: -6px; left: 28px; font-family: var(--font-display); font-size: 140px; font-weight: 700; font-style: italic; color: var(--accent-soft); line-height: 1; z-index: 0; pointer-events: none; }
+.ob-page .proof-card > * { position: relative; z-index: 1; }
+.ob-page .proof-quote { font-family: var(--font-display); font-style: italic; font-size: 23px; font-weight: 500; color: var(--text-primary); line-height: 1.5; margin: 0 0 20px; }
+.ob-page .proof-attribution { font-size: 14px; color: var(--text-secondary); margin-bottom: 40px; }
+.ob-page .proof-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; border-top: 1px solid var(--border-soft); padding-top: 32px; }
+.ob-page .proof-stat-value { font-family: var(--font-mono); font-size: 30px; font-weight: 700; color: var(--accent-deep); margin-bottom: 6px; }
+.ob-page .proof-stat-label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.03em; color: var(--text-muted); }
+@media (max-width: 991px) { .ob-page .proof-card { padding: 32px; } .ob-page .proof-quote { font-size: 19px; } .ob-page .proof-stats { grid-template-columns: 1fr; gap: 20px; } }
+
+/* BRIDGE / FINAL CTA */
+.ob-page .bridge { background: var(--background); text-align: center; padding: 100px 0; border-top: 1px solid var(--border-soft); }
+.ob-page .bridge h2 { max-width: 24ch; margin: 0 auto 16px; }
+.ob-page .bridge p { max-width: 56ch; margin: 0 auto 32px; }
+
+/* ── DIAGRAM PULSE (chips feeding the intelligence layer) ── */
+.ob-page .diagram-chip { animation: ob-chip-pulse 12s ease-in-out infinite; }
+.ob-page .diagram-sources .diagram-chip:nth-child(1) { animation-delay: 0s; }
+.ob-page .diagram-sources .diagram-chip:nth-child(2) { animation-delay: 2s; }
+.ob-page .diagram-sources .diagram-chip:nth-child(3) { animation-delay: 4s; }
+.ob-page .diagram-sources .diagram-chip:nth-child(4) { animation-delay: 6s; }
+.ob-page .diagram-sources .diagram-chip:nth-child(5) { animation-delay: 8s; }
+.ob-page .diagram-sources .diagram-chip:nth-child(6) { animation-delay: 10s; }
+@keyframes ob-chip-pulse {
+  0%, 100% { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.16); color: rgba(255,255,255,0.75); }
+  4% { background: rgba(255,122,41,0.22); border-color: rgba(255,122,41,0.55); color: #FFFFFF; }
+  9% { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.16); color: rgba(255,255,255,0.75); }
+}
+@media (prefers-reduced-motion: reduce) { .ob-page .diagram-chip { animation: none !important; } }
+
+/* ── GOVERNANCE CHAIN-OF-CUSTODY FLOW ── */
+.ob-page .gov-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 8px 0 48px; }
+.ob-page .gov-node { font-family: var(--font-mono); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.16); border-radius: 8px; padding: 10px 18px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.75); }
+.ob-page .gov-node.gov-review { background: rgba(255,122,41,0.16); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.ob-page .gov-arrow { font-size: 13px; color: rgba(255,255,255,0.4); }
+
+/* ── CARD GRID SCROLL REVEAL ── */
+.ob-page .grid-2 .card, .ob-page .grid-3 .card {
+  opacity: 0;
+  transform: translateY(32px) scale(.94);
+  transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
+}
+.ob-page .grid-2.in-view .card, .ob-page .grid-3.in-view .card { opacity: 1; transform: translateY(0) scale(1); }
+.ob-page .grid-2 .card:nth-child(1), .ob-page .grid-3 .card:nth-child(1) { transition-delay: .05s; }
+.ob-page .grid-2 .card:nth-child(2), .ob-page .grid-3 .card:nth-child(2) { transition-delay: .12s; }
+.ob-page .grid-2 .card:nth-child(3), .ob-page .grid-3 .card:nth-child(3) { transition-delay: .19s; }
+.ob-page .grid-2 .card:nth-child(4), .ob-page .grid-3 .card:nth-child(4) { transition-delay: .26s; }
+.ob-page .grid-3 .card:nth-child(5) { transition-delay: .33s; }
+.ob-page .grid-3 .card:nth-child(6) { transition-delay: .40s; }
+@media (prefers-reduced-motion: reduce) {
+  .ob-page .grid-2 .card, .ob-page .grid-3 .card { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* ── OPSBOOK GEAR MARK, fluid and continuous, reused as a brand accent across sections ── */
+.ob-page .ob-gear-spin { animation: ob-gear-spin 42s linear infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes ob-gear-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ob-page .ob-gear-spin { animation: none; } }
+
+.ob-page .loop-center-wrap { position: relative; }
+.ob-page .loop-center-gear { position: absolute; top: 52%; left: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; color: var(--text-muted); }
+
+.ob-page .diagram-core { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.ob-page .diagram-core-gear { width: 20px; height: 20px; flex-shrink: 0; color: var(--accent); animation: ob-gear-spin 26s linear infinite; transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: reduce) { .ob-page .diagram-core-gear { animation: none; } }
+
+.ob-page .gov-node-gear { width: 14px; height: 14px; margin-right: 6px; vertical-align: -2px; color: rgba(255,255,255,0.6); animation: ob-gear-spin 20s linear infinite; transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: reduce) { .ob-page .gov-node-gear { animation: none; } }
+
+.ob-page .bridge { position: relative; overflow: hidden; }
+.ob-page .bridge-gear-bg { position: absolute; z-index: -1; top: 50%; left: 50%; width: 900px; height: 900px; margin: -450px 0 0 -450px; color: rgba(255,255,255,0.05); animation: ob-gear-spin 100s linear infinite; transform-box: fill-box; transform-origin: center; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .ob-page .bridge-gear-bg { animation: none; } }
+@media (max-width: 768px) { .ob-page .bridge-gear-bg { width: 560px; height: 560px; margin: -280px 0 0 -280px; } }
+
+/* ── DARK-INVERTED MODIFIER (for staggering additional black sections) ── */
+.ob-page .usecase-solo.dark, .ob-page .cardsection.dark, .ob-page .bridge.dark { background-color: var(--text-primary); background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px); background-size: 48px 48px; color: #FFFFFF; border-color: transparent; }
+.ob-page .usecase-solo.dark .label.muted, .ob-page .cardsection.dark .label.muted, .ob-page .bridge.dark .label.muted { color: rgba(255,255,255,0.6); }
+.ob-page .usecase-solo.dark h2, .ob-page .cardsection.dark h2, .ob-page .bridge.dark h2,
+.ob-page .usecase-solo.dark h3, .ob-page .cardsection.dark h3 { color: #FFFFFF; }
+.ob-page .usecase-solo.dark p, .ob-page .cardsection.dark p, .ob-page .bridge.dark p { color: rgba(255,255,255,0.7); }
+.ob-page .usecase-solo.dark .index { color: rgba(255,255,255,0.6); }
+.ob-page .cardsection.dark .card { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.14); }
+.ob-page .cardsection.dark .card-label, .ob-page .cardsection.dark .index-tag { color: rgba(255,255,255,0.5); }
+.ob-page .cardsection.dark .card h3 { color: #FFFFFF; }
+.ob-page .cardsection.dark .card p { color: rgba(255,255,255,0.65); }
+.ob-page .cardsection.dark .card:hover { border-color: var(--accent); }
+.ob-page .cardsection.dark .card-link { color: var(--accent); }
+.ob-page .bridge.dark { border-top-color: rgba(255,255,255,0.12); }
+.ob-page .bridge.dark .cta-secondary { color: #FFFFFF; border-color: rgba(255,255,255,0.3); }
+.ob-page .bridge.dark .cta-secondary:hover { border-color: var(--accent); color: var(--accent); background: rgba(255,122,41,0.08); }
+</style>
+
+<div class="ob-page">
+<!-- Opsbook gear mark, defined once, reused via <use> throughout the page. Recolored with currentColor so it always matches page tokens. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ob-gear" viewBox="0 0 510 510">
+      <circle cx="255" cy="255" r="248" fill="none" stroke="currentColor" stroke-width="7"/>
+      <path fill="none" stroke="currentColor" stroke-width="11" d="M442.84,296.83l-40.58,6.08c-8.89,17.66-12.14,24.12-21.03,41.78l19.29,36.21c-23.1,19.93-19.18,16.55-42.28,36.49l-33-24.39c-18.78,6.2-25.63,8.48-44.41,14.69l-11.96,39.26c-30.43-2.25-25.28-1.87-55.71-4.1l-6.07-40.58c-17.67-8.89-24.12-12.14-41.79-21.03l-36.22,19.31c-19.93-23.11-16.55-19.2-36.49-42.3l24.39-32.98c-6.2-18.79-8.47-25.65-14.69-44.42l-39.24-11.96c2.24-30.43,1.85-25.27,4.09-55.7l40.58-6.08c8.89-17.67,12.14-24.12,21.03-41.79l-19.29-36.2c23.1-19.93,19.19-16.57,42.28-36.5l33,24.39c18.78-6.2,25.63-8.47,44.41-14.67l11.96-39.26c30.43,2.24,25.28,1.85,55.71,4.1l6.07,40.58c17.67,8.88,24.12,12.14,41.79,21.03l36.22-19.31c19.93,23.1,16.55,19.18,36.49,42.3l-24.39,32.98c6.2,18.78,8.48,25.63,14.69,44.42l39.24,11.94c-2.24,30.43-1.85,25.28-4.09,55.71Z"/>
+    </symbol>
+  </defs>
+</svg>
+<!-- Spacer: adjust height to match your Webflow site nav's actual height -->
+<div style="height:100px;background:var(--surface);"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <svg class="ob-gear ob-gear-spin hero-gear-bg" viewBox="0 0 510 510" aria-hidden="true"><use href="#ob-gear"/></svg>
+  <div class="container">
+    <span class="label"><span class="live-dot" aria-hidden="true"></span>Operational Readiness Intelligence</span>
+    <h1>Readiness isn't a project. It's a discipline.</h1>
+    <p class="lead">Opsbook continuously learns how your organization actually works, finds the gaps in your preparedness, and helps you close them, before disruption forces the issue.</p>
+    <p class="entity-line">Opsbook is an AI-powered operational readiness platform that connects an organization's documents, playbooks, exercises, and after-action reports into one continuously improving intelligence layer.</p>
+    <a href="https://opsbook.ai/demo" class="cta-btn">Request a Demo &rarr;</a>
+    <a href="/product" class="cta-secondary">See How It Works</a>
+  </div>
+</section>
+
+<!-- WHY ORGANIZATIONS STRUGGLE -->
+<section class="problem">
+  <div class="container">
+    <div class="header">
+      <span class="label muted">The Problem</span>
+      <h2>Your organization already knows how to be ready. That knowledge just isn't connected.</h2>
+      <p>Every organization holds enormous operational knowledge: plans, procedures, playbooks, policies, exercise records, incident reports, after-action reports, and the experience carried by your people. Because it lives in separate systems and separate heads, nobody can see the full picture.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-index">01</div>
+        <div class="card-label">Gaps Stay Invisible</div>
+        <p>Nobody owns the full picture of what's actually covered and what isn't.</p>
+      </div>
+      <div class="card">
+        <div class="card-index">02</div>
+        <div class="card-label">Preparedness Decays</div>
+        <p>Plans go stale the moment the organization changes underneath them.</p>
+      </div>
+      <div class="card">
+        <div class="card-index">03</div>
+        <div class="card-label">Lessons Get Lost</div>
+        <p>Findings from an exercise or a real incident rarely make it back into the next plan.</p>
+      </div>
+      <div class="card">
+        <div class="card-index">04</div>
+        <div class="card-label">Response Depends on Memory</div>
+        <p>Under pressure, teams fall back on what one or two people remember, not on what the organization has actually learned.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ONE OPERATIONAL INTELLIGENCE PLATFORM -->
+<section class="solution">
+  <div class="container">
+    <div class="grid">
+      <div class="label">The Foundation</div>
+      <div>
+        <p><strong>Everything your organization creates should make it more prepared.</strong></p>
+        <p class="sub">Opsbook connects the sources of operational knowledge that normally sit apart. Instead of existing as isolated files and one-off events, they continuously inform and strengthen each other inside a single, shared intelligence layer.</p>
+        <div class="diagram">
+          <div class="diagram-sources">
+            <span class="diagram-chip">Documents</span>
+            <span class="diagram-chip">Playbooks</span>
+            <span class="diagram-chip">Exercises</span>
+            <span class="diagram-chip">Evaluations</span>
+            <span class="diagram-chip">After-Action Reports</span>
+            <span class="diagram-chip">Operational Improvements</span>
+          </div>
+          <div class="diagram-arrow">feed &darr;</div>
+          <div class="diagram-core"><svg class="ob-gear diagram-core-gear" viewBox="0 0 510 510" aria-hidden="true"><use href="#ob-gear"/></svg>Operational Intelligence Layer</div>
+          <div class="diagram-arrow">&uarr; recommendations back to every team</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTINUOUS READINESS LOOP -->
+<section class="usecase-solo">
+  <div class="container">
+    <div class="inner">
+      <span class="label muted">How It Works</span>
+      <h2>Preparedness that keeps working after the exercise ends.</h2>
+      <p>Most resilience programs stop at the after-action report. Opsbook builds a living ontology of your organization, so learning generates outputs at any phase of your cycle, not just after the exercise.</p>
+    </div>
+
+    <div class="loopwrap loop-center-wrap">
+      <svg class="ob-gear ob-gear-spin loop-center-gear" viewBox="0 0 510 510" aria-hidden="true"><use href="#ob-gear"/></svg>
+      <svg viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:580px; height:auto;">
+        <circle class="loop-ring" cx="360" cy="380" r="230" fill="none" stroke="var(--border-soft)" stroke-width="1.5" stroke-dasharray="6 10"/>
+        <circle class="loop-traveler" r="5" fill="var(--accent)"/>
+        <polygon class="loop-arrow" points="-6,-5 6,0 -6,5" fill="var(--text-muted)" transform="translate(439,164) rotate(20)" style="animation-delay:0s"/>
+        <polygon class="loop-arrow" points="-6,-5 6,0 -6,5" fill="var(--text-muted)" transform="translate(559,265) rotate(60)" style="animation-delay:.2s"/>
+        <polygon class="loop-arrow" points="-6,-5 6,0 -6,5" fill="var(--text-muted)" transform="translate(587,420) rotate(100)" style="animation-delay:.4s"/>
+        <polygon class="loop-arrow" points="-6,-5 6,0 -6,5" fill="var(--text-muted)" transform="translate(508,556) rotate(140)" style="animation-delay:.6s"/>
+        <polygon class="loop-arrow" points="-6,-5 6,0 -6,5" fill="var(--text-muted)" transform="translate(360,610) rotate(180)" style="animation-delay:.8s"/>
+        <polygon class="loop-arrow" points="-6,-5 6,0 -6,5" fill="var(--text-muted)" transform="translate(212,556) rotate(220)" style="animation-delay:1s"/>
+        <polygon class="loop-arrow" points="-6,-5 6,0 -6,5" fill="var(--text-muted)" transform="translate(134,420) rotate(260)" style="animation-delay:1.2s"/>
+        <polygon class="loop-arrow" points="-6,-5 6,0 -6,5" fill="var(--text-muted)" transform="translate(161,265) rotate(300)" style="animation-delay:1.4s"/>
+        <polygon class="loop-arrow" points="-6,-5 6,0 -6,5" fill="var(--text-muted)" transform="translate(281,164) rotate(340)" style="animation-delay:1.6s"/>
+
+        <g class="loop-node-group" style="--ldx:0px;--ldy:230px;--ld:0s"><circle class="loop-node" cx="360" cy="150" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5" style="animation-delay:0s"/>
+          <text x="360" y="155" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text-primary)">01</text>
+          <text x="360" y="69" text-anchor="middle" font-size="11" fill="var(--text-secondary)">Understand</text>
+          <text x="360" y="85" text-anchor="middle" font-size="11" fill="var(--text-secondary)">Organization</text></g>
+        <g class="loop-node-group" style="--ldx:-148px;--ldy:176px;--ld:.07s"><circle class="loop-node" cx="508" cy="204" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5" style="animation-delay:2s"/>
+          <text x="508" y="209" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text-primary)">02</text>
+          <text x="556" y="140" text-anchor="middle" font-size="11" fill="var(--text-secondary)">Identify</text>
+          <text x="556" y="156" text-anchor="middle" font-size="11" fill="var(--text-secondary)">Gaps</text></g>
+        <g class="loop-node-group" style="--ldx:-227px;--ldy:40px;--ld:.14s"><circle class="loop-node" cx="587" cy="340" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5" style="animation-delay:4s"/>
+          <text x="587" y="345" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text-primary)">03</text>
+          <text x="660" y="331" text-anchor="middle" font-size="11" fill="var(--text-secondary)">Prepare</text></g>
+        <g class="loop-node-group" style="--ldx:-199px;--ldy:-115px;--ld:.21s"><circle class="loop-node" cx="559" cy="495" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5" style="animation-delay:6s"/>
+          <text x="559" y="500" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text-primary)">04</text>
+          <text x="624" y="537" text-anchor="middle" font-size="11" fill="var(--text-secondary)">Exercise</text></g>
+        <g class="loop-node-group" style="--ldx:-79px;--ldy:-216px;--ld:.28s"><circle class="loop-node" cx="439" cy="596" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5" style="animation-delay:8s"/>
+          <text x="439" y="601" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text-primary)">05</text>
+          <text x="464" y="671" text-anchor="middle" font-size="11" fill="var(--text-secondary)">Evaluate</text></g>
+        <g class="loop-node-group" style="--ldx:79px;--ldy:-216px;--ld:.35s"><circle class="loop-node" cx="281" cy="596" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5" style="animation-delay:10s"/>
+          <text x="281" y="601" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text-primary)">06</text>
+          <text x="256" y="671" text-anchor="middle" font-size="11" fill="var(--text-secondary)">Improve</text></g>
+        <g class="loop-node-group" style="--ldx:199px;--ldy:-115px;--ld:.42s"><circle class="loop-node" cx="161" cy="495" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5" style="animation-delay:12s"/>
+          <text x="161" y="500" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text-primary)">07</text>
+          <text x="96" y="537" text-anchor="middle" font-size="11" fill="var(--text-secondary)">Verify</text></g>
+        <g class="loop-node-group" style="--ldx:226px;--ldy:40px;--ld:.49s"><circle class="loop-node" cx="134" cy="340" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5" style="animation-delay:14s"/>
+          <text x="134" y="345" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text-primary)">08</text>
+          <text x="60" y="322" text-anchor="middle" font-size="11" fill="var(--text-secondary)">Increase</text>
+          <text x="60" y="338" text-anchor="middle" font-size="11" fill="var(--text-secondary)">Readiness</text></g>
+        <g class="loop-node-group" style="--ldx:148px;--ldy:176px;--ld:.56s"><circle class="loop-node" cx="212" cy="204" r="32" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5" style="animation-delay:16s"/>
+          <text x="212" y="209" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text-primary)">09</text>
+          <text x="164" y="140" text-anchor="middle" font-size="11" fill="var(--text-secondary)">Repeat</text></g>
+      </svg>
+    </div>
+
+    <p style="text-align:center; max-width:620px; margin:16px auto 0;">Every cycle makes the next one faster and more accurate, because the organization Opsbook understands keeps getting more complete.</p>
+  </div>
+</section>
+
+<!-- PRODUCT PILLARS -->
+<section class="cardsection alt">
+  <div class="container">
+    <div class="header">
+      <span class="label muted">The Platform</span>
+      <h2>Five capabilities. One continuously improving system.</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="index-tag"><span class="idx">01</span> &middot; Organizational Intelligence</div>
+        <h3>Understand how your organization works</h3>
+        <p>A continuously improving model of your roles, teams, systems, and dependencies, drawn from the documentation you already have.</p>
+      </div>
+      <div class="card">
+        <div class="index-tag"><span class="idx">02</span> &middot; Preparedness Intelligence</div>
+        <h3>Know what to fix first</h3>
+        <p>Continuously surfaces missing playbooks, unvalidated procedures, and coverage gaps, and recommends what to prioritize next.</p>
+      </div>
+      <div class="card">
+        <div class="index-tag"><span class="idx">03</span> &middot; Exercise Intelligence</div>
+        <h3>Design, run, and evaluate exercises</h3>
+        <p>AI-assisted scenario creation, live injects, role-based response workspaces, and after-action reports that produce real evidence.</p>
+      </div>
+      <div class="card">
+        <div class="index-tag"><span class="idx">04</span> &middot; Operational Learning</div>
+        <h3>Make sure what you learn sticks</h3>
+        <p>Lessons learned and verified improvements stay captured and connected, with evidence and provenance, instead of disappearing after the debrief.</p>
+      </div>
+      <div class="card">
+        <div class="index-tag"><span class="idx">05</span> &middot; Response Intelligence</div>
+        <h3>Preparedness that extends into response</h3>
+        <p>Opsbook extends preparedness into operational response, assembling role-based guidance from your organization's own validated knowledge.</p>
+      </div>
+    </div>
+    <div style="margin-top:32px;">
+      <a href="/product" class="cta-secondary">Explore the Platform &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ENTERPRISE GOVERNANCE -->
+<section class="cardsection dark">
+  <div class="container">
+    <div class="header">
+      <span class="label muted">Built for Regulated Environments</span>
+      <h2>AI that accelerates the work. Humans who stay in control.</h2>
+      <p>Opsbook uses AI to build and maintain a custom, dynamic ontology specific to your organization, then uses it to discover gaps, recommend improvements, draft playbooks, and analyze exercise outcomes. It does not make unilateral decisions on your behalf.</p>
+      <div class="gov-flow" role="img" aria-label="Chain of custody: source material feeds an AI recommendation, which passes human review before being published">
+        <span class="gov-node">Source Material</span>
+        <span class="gov-arrow" aria-hidden="true">&rarr;</span>
+        <span class="gov-node"><svg class="ob-gear gov-node-gear" viewBox="0 0 510 510" aria-hidden="true"><use href="#ob-gear"/></svg>AI Recommendation</span>
+        <span class="gov-arrow" aria-hidden="true">&rarr;</span>
+        <span class="gov-node gov-review">Human Review &#10003;</span>
+        <span class="gov-arrow" aria-hidden="true">&rarr;</span>
+        <span class="gov-node">Published</span>
+      </div>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-label">Review</div>
+        <h3>Human review</h3>
+        <p>Recommendations are reviewed and approved by your team, not auto-published.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Evidence</div>
+        <h3>Evidence and provenance</h3>
+        <p>Every finding traces back to its source, whether that's a document, an exercise, or a real incident.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Audit</div>
+        <h3>Auditability</h3>
+        <p>Outputs map to the frameworks your regulators and auditors already examine, including DORA, NERC CIP, CMMC, HIPAA, NIS2, HSEEP, MYTEP, SEC, ISO, etc.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRY SOLUTIONS -->
+<section class="cardsection alt">
+  <div class="container">
+    <div class="header">
+      <span class="label muted">Built for Your Industry</span>
+      <h2>The same platform. The threats and requirements that matter to your sector.</h2>
+      <p>Opsbook's operational intelligence adapts to the realities of regulated, high-consequence environments, from core banking outages to OT/SCADA integrity incidents to CUI exposure.</p>
+    </div>
+    <div class="grid-3">
+      <a href="/solutions-financial-services" class="card">
+        <div class="card-label">Financial Services</div>
+        <h3>Banking, insurance &amp; capital markets</h3>
+        <p>Core system outages, fraud, vendor ICT failures, and regulatory notification decisions.</p>
+        <span class="card-link">View solution &rarr;</span>
+      </a>
+      <a href="/solutions-healthcare" class="card">
+        <div class="card-label">Healthcare</div>
+        <h3>Hospitals &amp; health systems</h3>
+        <p>EHR downtime, ransomware, PHI exposure, and third-party disruption.</p>
+        <span class="card-link">View solution &rarr;</span>
+      </a>
+      <a href="/solutions-manufacturing" class="card">
+        <div class="card-label">Manufacturing</div>
+        <h3>Plants, OT &amp; supply chain</h3>
+        <p>OT ransomware, vendor remote access risk, ERP/MES outages across shifts.</p>
+        <span class="card-link">View solution &rarr;</span>
+      </a>
+      <a href="/solutions-energy" class="card">
+        <div class="card-label">Energy &amp; Utilities</div>
+        <h3>OT, grid ops &amp; compliance</h3>
+        <p>SCADA/OT integrity incidents, remote access compromise, and evidence exports.</p>
+        <span class="card-link">View solution &rarr;</span>
+      </a>
+      <a href="/solutions-defense" class="card">
+        <div class="card-label">Defense</div>
+        <h3>Defense &amp; government contractors</h3>
+        <p>CUI-impacting scenarios: supplier compromise, insider threat, reporting-clock decisions.</p>
+        <span class="card-link">View solution &rarr;</span>
+      </a>
+      <a href="/solutions-public-sector" class="card">
+        <div class="card-label">Public Sector</div>
+        <h3>Government agencies &amp; municipalities</h3>
+        <p>Ransomware, citizen data breaches, and public communications breakdowns.</p>
+        <span class="card-link">View solution &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOMER OUTCOMES -->
+<section class="cardsection">
+  <div class="container">
+    <div class="header">
+      <span class="label muted">Results</span>
+      <h2>Measured in readiness, not just activity.</h2>
+    </div>
+    <div class="proof-card">
+      <p class="proof-quote">"We have reduced scenario development time by 50% or more, depending on complexity, without relying on static templates. Opsbook provides a structured framework that allows us to rapidly build and adapt exercises in real time, tailoring each scenario to the client's environment."</p>
+      <div class="proof-attribution">&mdash; Blue Team Alpha, MSSP delivery partner</div>
+      <div class="proof-stats">
+        <div class="proof-stat">
+          <div class="proof-stat-value">50%+</div>
+          <div class="proof-stat-label">Faster scenario development</div>
+        </div>
+        <div class="proof-stat">
+          <div class="proof-stat-value">Weeks &rarr; Days</div>
+          <div class="proof-stat-label">Compressed tabletop delivery timelines</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROI CALCULATOR CTA -->
+<section class="usecase-solo">
+  <div class="container">
+    <div class="inner">
+      <span class="label muted">Free ROI Calculator</span>
+      <h2>See what continuous readiness could save your team.</h2>
+      <p>Answer a few questions about your exercise program, incident history, and compliance workload. Get an estimate of what moving to Opsbook could save you each year.</p>
+      <a href="/roi-calculator" class="cta-btn">Calculate Your Savings &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="bridge dark">
+  <svg class="ob-gear ob-gear-spin bridge-gear-bg" viewBox="0 0 510 510" aria-hidden="true"><use href="#ob-gear"/></svg>
+  <div class="container">
+    <span class="label muted">Get Started</span>
+    <h2>See what your organization already knows about itself.</h2>
+    <p>Book a walkthrough and see how Opsbook turns scattered plans, playbooks, and exercise history into one continuously improving readiness program.</p>
+    <a href="https://opsbook.ai/demo" class="cta-btn">Request a Demo &rarr;</a>
+    <a href="/product" class="cta-secondary">See Opsbook in Action</a>
+  </div>
+</section>
+
+<script>
+(function() {
+  'use strict';
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var targets = document.querySelectorAll('.ob-page .grid-2, .ob-page .grid-3');
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    targets.forEach(function(el) { el.classList.add('in-view'); });
+  } else {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    targets.forEach(function(el) { observer.observe(el); });
+  }
+
+  // Loop: step nodes pop out from the center gear on scroll; once all nine
+  // have landed (tracked via animationend, not a guessed timeout), the ring,
+  // arrows, node pulse, and traveler switch on and run continuously.
+  var loopwraps = document.querySelectorAll('.ob-page .loopwrap');
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    loopwraps.forEach(function(lw) { lw.classList.add('pop-in', 'loop-active'); });
+    return;
+  }
+  loopwraps.forEach(function(lw) {
+    var nodeCount = lw.querySelectorAll('.loop-node-group').length;
+    var completed = 0;
+    lw.addEventListener('animationend', function(e) {
+      if (e.animationName === 'loop-pop-in') {
+        completed++;
+        if (completed >= nodeCount) lw.classList.add('loop-active');
+      }
+    });
+    var loopObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('pop-in');
+          loopObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    loopObserver.observe(lw);
+  });
+})();
+</script>
+</div>
