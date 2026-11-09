@@ -1,0 +1,297 @@
+<title>Opsbook Content Desk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap">
+<style>
+/* Layout: sticky week bar, cadence summary, two lanes (weekly blog, Mon/Wed/Fri social) of review cards. */
+:root {
+  --bg: #F8F8F8;
+  --surface: #FFFFFF;
+  --ink: #141414;
+  --ink-2: #5C616D;
+  --line: #E1E2E6;
+  --line-strong: #BCBDC0;
+  --accent: #FF7A29;
+  --accent-ink: #9A3E0C;
+  --accent-soft: rgba(255,122,41,.13);
+  --ok: #17794A;
+  --ok-soft: rgba(23,121,74,.12);
+  --warn: #8A5A00;
+  --warn-soft: rgba(214,150,0,.16);
+  --bad: #B3261E;
+  --bad-soft: rgba(179,38,30,.10);
+  --btn: #0B0B0B;
+  --btn-ink: #FFFFFF;
+  --f-display: 'Fraunces', Georgia, serif;
+  --f-body: 'Poppins', system-ui, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F0F11; --surface: #18181B; --ink: #F2F2F3; --ink-2: #A4A8B2;
+    --line: #2A2B30; --line-strong: #43454D; --accent: #FF8A40; --accent-ink: #FFB487;
+    --accent-soft: rgba(255,138,64,.16); --ok: #4CC38A; --ok-soft: rgba(76,195,138,.14);
+    --warn: #F0BE5A; --warn-soft: rgba(240,190,90,.14); --bad: #FF8A80; --bad-soft: rgba(255,138,128,.13);
+    --btn: #F2F2F3; --btn-ink: #0B0B0B; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F0F11; --surface: #18181B; --ink: #F2F2F3; --ink-2: #A4A8B2;
+  --line: #2A2B30; --line-strong: #43454D; --accent: #FF8A40; --accent-ink: #FFB487;
+  --accent-soft: rgba(255,138,64,.16); --ok: #4CC38A; --ok-soft: rgba(76,195,138,.14);
+  --warn: #F0BE5A; --warn-soft: rgba(240,190,90,.14); --bad: #FF8A80; --bad-soft: rgba(255,138,128,.13);
+  --btn: #F2F2F3; --btn-ink: #0B0B0B; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 14px; line-height: 1.55;
+  padding-block: 0 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1040px; margin: 0 auto; }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+header.bar { padding: 28px 0 18px; display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: end; justify-content: space-between; }
+.eyebrow { font-family: var(--f-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-2); }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(28px, 5vw, 40px); line-height: 1.1; margin: 4px 0 0; text-wrap: balance; }
+.weeknav { display: flex; align-items: center; gap: 8px; }
+.weeknav .wk { font-family: var(--f-mono); font-size: 13px; min-width: 190px; text-align: center; }
+.weeknav .wk small { display: block; color: var(--ink-2); font-size: 11px; }
+.iconbtn { width: 36px; height: 36px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); border-radius: 8px; }
+.iconbtn:hover { border-color: var(--ink); }
+
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 8px 0 28px; }
+.sum { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.sum .lbl { font-family: var(--f-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
+.sum .val { font-family: var(--f-display); font-size: 26px; font-weight: 600; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.sum .val span { font-size: 14px; color: var(--ink-2); font-family: var(--f-body); font-weight: 400; }
+.meter { display: flex; gap: 4px; margin-top: 8px; }
+.meter i { flex: 1; height: 6px; border-radius: 3px; background: var(--line); }
+.meter i.ok { background: var(--ok); }
+.meter i.pending { background: var(--accent); }
+.meter i.changes { background: var(--warn); }
+
+.lane { margin-bottom: 32px; }
+.lane h2 { font-family: var(--f-mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 12px; display: flex; gap: 10px; align-items: center; }
+.lane h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.cards { display: grid; gap: 14px; }
+.cards.social { grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.card[data-status="pending"] { border-color: var(--line-strong); }
+.card .top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.meta { font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 6px 12px; }
+.pill { font-family: var(--f-mono); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; }
+.pill.pending { background: var(--accent-soft); color: var(--accent-ink); }
+.pill.approved { background: var(--ok-soft); color: var(--ok); }
+.pill.changes { background: var(--warn-soft); color: var(--warn); }
+.pill.rejected { background: var(--bad-soft); color: var(--bad); }
+.card h3 { font-family: var(--f-display); font-size: 20px; line-height: 1.25; margin: 0; text-wrap: balance; }
+.body { white-space: pre-wrap; color: var(--ink); max-width: 68ch; overflow-wrap: anywhere; }
+.body.clamp { display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
+.more { align-self: start; background: none; border: 0; padding: 0; color: var(--accent-ink); font-size: 12.5px; text-decoration: underline; }
+.note { background: var(--warn-soft); color: var(--ink); border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+.note b { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--warn); display: block; }
+textarea, input[type=text], input[type=date] { width: 100%; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line-strong); border-radius: 8px; padding: 8px 10px; }
+textarea { min-height: 150px; resize: vertical; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 4px; }
+.btn { border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); border-radius: 8px; padding: 7px 14px; font-weight: 500; font-size: 13px; }
+.btn:hover { border-color: var(--ink); }
+.btn.primary { background: var(--btn); color: var(--btn-ink); border-color: var(--btn); }
+.btn.danger { color: var(--bad); }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.empty { border: 1px dashed var(--line-strong); border-radius: 12px; padding: 22px; color: var(--ink-2); background: var(--surface); }
+.empty b { color: var(--ink); display: block; margin-bottom: 4px; }
+.banner { background: var(--accent-soft); color: var(--accent-ink); border-radius: 8px; padding: 10px 14px; margin-bottom: 18px; font-size: 13px; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(20px, env(safe-area-inset-bottom, 0px)); background: var(--btn); color: var(--btn-ink); padding: 9px 16px; border-radius: 999px; font-size: 13px; z-index: 20; }
+@media (prefers-reduced-motion: no-preference) { .card { transition: border-color .15s; } }
+@media (max-width: 520px) { .weeknav .wk { min-width: 0; flex: 1; } .weeknav { width: 100%; } }
+</style>
+
+<div class="wrap">
+  <header class="bar">
+    <div>
+      <div class="eyebrow">Opsbook · Marketing</div>
+      <h1>Content Desk</h1>
+    </div>
+    <div class="weeknav">
+      <button class="iconbtn" id="prev" aria-label="Previous week">&larr;</button>
+      <div class="wk" id="wk">&nbsp;</div>
+      <button class="iconbtn" id="next" aria-label="Next week">&rarr;</button>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <section class="summary" id="summary" aria-label="Weekly cadence"></section>
+
+  <section class="lane">
+    <h2>Weekly blog post</h2>
+    <div class="cards" id="blog"></div>
+  </section>
+
+  <section class="lane">
+    <h2>Social · Mon / Wed / Fri</h2>
+    <div class="cards social" id="social"></div>
+  </section>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var items = [];          // [{id, ...data}]
+  var canWrite = false;
+  var db = null, user = null;
+  var editing = {}, asking = {}, expanded = {};
+  var state = { week: isoWeek(new Date()) };
+  var SLOTS = ['Mon', 'Wed', 'Fri'];
+
+  function isoWeek(d) {
+    var t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    var day = t.getUTCDay() || 7;
+    t.setUTCDate(t.getUTCDate() + 4 - day);
+    var y = t.getUTCFullYear();
+    var w = Math.ceil((((t - Date.UTC(y, 0, 1)) / 86400000) + 1) / 7);
+    return y + '-W' + String(w).padStart(2, '0');
+  }
+  function weekStart(key) {
+    var y = +key.slice(0, 4), w = +key.slice(6);
+    var jan4 = new Date(Date.UTC(y, 0, 4));
+    var d = jan4.getUTCDay() || 7;
+    var mon = new Date(jan4); mon.setUTCDate(jan4.getUTCDate() - d + 1 + (w - 1) * 7);
+    return mon;
+  }
+  function shiftWeek(key, n) { var m = weekStart(key); m.setUTCDate(m.getUTCDate() + n * 7); return isoWeek(new Date(m.getUTCFullYear(), m.getUTCMonth(), m.getUTCDate())); }
+  function fmt(d) { return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function toast(msg) { var t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(function () { t.hidden = true; }, 2200); }
+  var LABEL = { pending: 'Needs review', approved: 'Approved', changes: 'Changes requested', rejected: 'Rejected' };
+
+  function write(id, patch) {
+    if (!db) return;
+    patch.updatedAt = new Date().toISOString();
+    db.collection('content').doc(id).update(patch).catch(function (e) {
+      toast(e && e.code === 'not_granted' ? 'Only editors can change posts.' : 'Could not save. Try again.');
+    });
+  }
+  function decide(it, status, note) {
+    var p = { status: status, decidedAt: new Date().toISOString(), note: note || '' };
+    if (user && user.id) { user.id().then(function (u) { p.decidedBy = u; write(it.id, p); }, function () { write(it.id, p); }); }
+    else write(it.id, p);
+    delete asking[it.id];
+    toast(status === 'approved' ? 'Approved. The social agent can now schedule it.' : status === 'changes' ? 'Sent back with your note.' : status === 'rejected' ? 'Rejected.' : 'Moved back to review.');
+  }
+
+  function card(it) {
+    var c = el('article', 'card'); c.dataset.status = it.status || 'pending';
+    var top = el('div', 'top');
+    var meta = el('div', 'meta');
+    if (it.kind === 'social') { meta.appendChild(el('span', null, (it.slot || '') + (it.scheduledFor ? ' · ' + it.scheduledFor : ''))); meta.appendChild(el('span', null, it.channel || 'LinkedIn')); }
+    else { meta.appendChild(el('span', null, it.scheduledFor ? 'Publish ' + it.scheduledFor : 'Blog')); if (it.channel) meta.appendChild(el('span', null, it.channel)); }
+    meta.appendChild(el('span', null, 'by ' + (it.author || 'agent')));
+    top.appendChild(meta);
+    top.appendChild(el('span', 'pill ' + (it.status || 'pending'), LABEL[it.status || 'pending']));
+    c.appendChild(top);
+
+    if (editing[it.id]) {
+      var ti = el('input'); ti.type = 'text'; ti.id = 'ti-' + it.id; ti.value = it.title || ''; ti.setAttribute('aria-label', 'Title');
+      var ta = el('textarea'); ta.id = 'ta-' + it.id; ta.value = it.body || ''; ta.setAttribute('aria-label', 'Body');
+      c.appendChild(ti); c.appendChild(ta);
+      var a = el('div', 'actions');
+      var save = el('button', 'btn primary', 'Save edits');
+      save.onclick = function () { write(it.id, { title: ti.value.trim(), body: ta.value, status: 'pending', note: '' }); delete editing[it.id]; toast('Saved. Back in review.'); };
+      var cancel = el('button', 'btn', 'Cancel'); cancel.onclick = function () { delete editing[it.id]; render(); };
+      a.appendChild(save); a.appendChild(cancel); c.appendChild(a);
+      return c;
+    }
+
+    if (it.title) c.appendChild(el('h3', null, it.title));
+    var long = (it.body || '').length > 420 && it.kind === 'blog';
+    var b = el('div', 'body' + (long && !expanded[it.id] ? ' clamp' : ''), it.body || '');
+    c.appendChild(b);
+    if (long) { var m = el('button', 'more', expanded[it.id] ? 'Show less' : 'Read full draft'); m.onclick = function () { expanded[it.id] = !expanded[it.id]; render(); }; c.appendChild(m); }
+    if (it.note && (it.status === 'changes' || it.status === 'rejected')) { var n = el('div', 'note'); n.appendChild(el('b', null, 'Your note')); n.appendChild(document.createTextNode(it.note)); c.appendChild(n); }
+
+    if (asking[it.id]) {
+      var q = el('textarea'); q.id = 'q-' + it.id; q.style.minHeight = '72px'; q.placeholder = 'What should change? The agent reads this note.'; q.setAttribute('aria-label', 'Change request');
+      c.appendChild(q);
+      var qa = el('div', 'actions');
+      var send = el('button', 'btn primary', 'Send back'); send.onclick = function () { if (!q.value.trim()) { toast('Add a note first.'); return; } decide(it, 'changes', q.value.trim()); };
+      var qc = el('button', 'btn', 'Cancel'); qc.onclick = function () { delete asking[it.id]; render(); };
+      qa.appendChild(send); qa.appendChild(qc); c.appendChild(qa);
+      return c;
+    }
+
+    var act = el('div', 'actions');
+    if (!canWrite) { act.appendChild(el('span', 'meta', 'View only. Editors can approve.')); }
+    else if (it.status === 'approved' || it.status === 'rejected') {
+      var undo = el('button', 'btn', 'Move back to review'); undo.onclick = function () { decide(it, 'pending', ''); }; act.appendChild(undo);
+    } else {
+      var ap = el('button', 'btn primary', 'Approve'); ap.onclick = function () { decide(it, 'approved', ''); };
+      var ch = el('button', 'btn', 'Request changes'); ch.onclick = function () { asking[it.id] = true; render(); };
+      var ed = el('button', 'btn', 'Edit'); ed.onclick = function () { editing[it.id] = true; render(); };
+      var rj = el('button', 'btn danger', 'Reject'); rj.onclick = function () { decide(it, 'rejected', ''); };
+      act.appendChild(ap); act.appendChild(ch); act.appendChild(ed); act.appendChild(rj);
+    }
+    c.appendChild(act);
+    return c;
+  }
+
+  function emptyState(title, text) { var e = el('div', 'empty'); e.appendChild(el('b', null, title)); e.appendChild(document.createTextNode(text)); return e; }
+
+  function meter(list, total) {
+    var m = el('div', 'meter');
+    for (var i = 0; i < total; i++) {
+      var s = list[i] && list[i].status; var cls = s === 'approved' ? 'ok' : s === 'changes' ? 'changes' : s ? 'pending' : '';
+      m.appendChild(el('i', cls));
+    }
+    return m;
+  }
+
+  function render() {
+    var start = weekStart(state.week), end = new Date(start); end.setUTCDate(end.getUTCDate() + 6);
+    var wk = $('wk'); wk.textContent = state.week; wk.appendChild(el('small', null, fmt(start) + ' – ' + fmt(end) + (state.week === isoWeek(new Date()) ? ' · this week' : '')));
+    var mine = items.filter(function (i) { return i.week === state.week; });
+    var blogs = mine.filter(function (i) { return i.kind === 'blog'; });
+    var socials = mine.filter(function (i) { return i.kind === 'social'; }).sort(function (a, b) { return SLOTS.indexOf(a.slot) - SLOTS.indexOf(b.slot); });
+
+    var sm = $('summary'); sm.textContent = '';
+    function tile(label, list, total) {
+      var ok = list.filter(function (i) { return i.status === 'approved'; }).length;
+      var t = el('div', 'sum'); t.appendChild(el('div', 'lbl', label));
+      var v = el('div', 'val', String(ok)); v.appendChild(el('span', null, ' of ' + total + ' approved')); t.appendChild(v); t.appendChild(meter(list, total)); return t;
+    }
+    sm.appendChild(tile('Blog post', blogs, 1));
+    sm.appendChild(tile('Social posts', socials, 3));
+    var waiting = mine.filter(function (i) { return (i.status || 'pending') === 'pending'; }).length;
+    var t3 = el('div', 'sum'); t3.appendChild(el('div', 'lbl', 'Waiting on you')); var v3 = el('div', 'val', String(waiting)); v3.appendChild(el('span', null, waiting === 1 ? ' draft' : ' drafts')); t3.appendChild(v3);
+    t3.appendChild(el('div', 'meta', waiting ? 'Review below' : 'Nothing to review')); sm.appendChild(t3);
+
+    var bl = $('blog'); bl.textContent = '';
+    if (blogs.length) blogs.forEach(function (i) { bl.appendChild(card(i)); });
+    else bl.appendChild(emptyState('No blog draft for this week yet', 'The content agent adds the weekly post here. Ask the orchestrator: "draft this week\'s blog post".'));
+
+    var so = $('social'); so.textContent = '';
+    if (socials.length) socials.forEach(function (i) { so.appendChild(card(i)); });
+    else so.appendChild(emptyState('No social drafts for this week yet', 'Three posts are expected, one each on Monday, Wednesday and Friday.'));
+  }
+
+  $('prev').onclick = function () { state.week = shiftWeek(state.week, -1); render(); };
+  $('next').onclick = function () { state.week = shiftWeek(state.week, 1); render(); };
+  render();
+
+  (async function () {
+    try {
+      db = await claude.use('db'); user = await claude.use('user');
+    } catch (e) { db = null; }
+    if (!db) { var b = $('banner'); b.hidden = false; b.textContent = 'Sign in to the artifact to load and approve drafts.'; return; }
+    try { canWrite = user ? await user.canEdit() : false; } catch (e) { canWrite = false; }
+    var timer = setTimeout(function () { var b = $('banner'); b.hidden = false; b.textContent = 'Drafts are taking a while to load.'; }, 10000);
+    db.collection('content').onSnapshot(function (snap) {
+      clearTimeout(timer); $('banner').hidden = true;
+      items = snap.docs.map(function (d) { var o = Object.assign({}, d.data()); o.id = d.id; return o; });
+      // Land on the newest week with drafts if the current week has none.
+      if (!state.touched) { state.touched = true; if (!items.some(function (i) { return i.week === state.week; }) && items.length) { state.week = items.map(function (i) { return i.week; }).sort().pop(); } }
+      render();
+    }, function () { clearTimeout(timer); var b = $('banner'); b.hidden = false; b.textContent = 'Could not load drafts.'; });
+  })();
+})();
+</script>

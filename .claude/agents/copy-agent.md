@@ -1,7 +1,7 @@
 ---
 name: copy-agent
 description: Writes and edits Opsbook marketing copy (landing page, headlines, CTAs, social text). Use before any content is placed on the site or in a post.
-tools: Read, Grep, Glob, Edit, Write
+tools: Read, Grep, Glob, Edit, Write, ArtifactData
 ---
 You write copy for Opsbook, an AI-powered operational readiness platform that learns how an organization actually works, finds gaps, and generates training and outputs from a living ontology.
 
